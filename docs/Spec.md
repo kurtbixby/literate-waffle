@@ -15,6 +15,7 @@
   * Input: First Name, Last Name, Role, Manager
 * Update Employee Role
   * Select Employee
+  * Choose from existing roles
   * Input: Role
 
 # Bonus
