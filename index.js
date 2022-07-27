@@ -43,6 +43,15 @@ const MAIN_MENU_PROMPT = [
                 name: 'Add Department',
                 value: 7
             },
+            new inquirer.Separator('-- Special --'),
+            {
+                name: 'Update Employee Manager',
+                value: 8
+            },
+            {
+                name: 'View Employees By Manager',
+                value: 9
+            },
             {
                 name: 'Quit',
                 value: 0
@@ -52,32 +61,21 @@ const MAIN_MENU_PROMPT = [
 ]
 
 async function main() {
+    const functions = [
+        viewEmployees,
+        addEmployee,
+        updateEmployeeRole,
+        viewRoles,
+        addRole,
+        viewDepartments,
+        addDepartment,
+        updateEmployeeManager
+    ];
     let choice = 0;
     do {
         choice = (await inquirer.prompt(MAIN_MENU_PROMPT)).choice;
-        switch (choice) {
-            case 1:
-                await viewEmployees();
-                break;
-            case 2:
-                await addEmployee();
-                break;
-            case 3:
-                await updateEmployeeRole();
-                break;
-            case 4:
-                await viewRoles();
-                break;
-            case 5:
-                await addRole();
-                break;
-            case 6:
-                await viewDepartments();
-                break;
-            case 7:
-                await addDepartment();
-                break;
-            default:       
+        if (choice > 0) {
+            await functions[choice - 1]();
         }
     } while (choice != 0);
 }
@@ -198,6 +196,33 @@ async function addDepartment() {
 
     const response = await inquirer.prompt(PROMPT);
     await dbi.addDepartment(response.name);
+}
+
+async function updateEmployeeManager() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the employee to update: ',
+            name: 'employee',
+            choices: []
+        },
+        {
+            type: 'list',
+            message: 'Choose the employee\'s new manager: ',
+            name: 'manager',
+            choices: []
+        }
+    ];
+    
+    const employees = await dbi.getEmployees();
+    employees.forEach(element => {
+        const fullName = `${element['First Name']} ${element['Last Name']}`;
+        PROMPT[0].choices.push({name: fullName, value: element.Id});
+        PROMPT[1].choices.push({name: fullName, value: element.Id});
+    });
+
+    const response = await inquirer.prompt(PROMPT);
+    await dbi.updateEmployeeManager(response.employee, response.manager);
 }
 
 main();

@@ -39,6 +39,10 @@ class MySqlInterface {
         await this.callStoredProcedure('CALL sp_update_employee_role(?, ?)', [employeeId, roleId]);
     }
 
+    async updateEmployeeManager(employeeId, managerId) {
+        await this.callStoredProcedure('CALL sp_update_employee_manager(?, ?)', [employeeId, managerId]);
+    }
+
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
         const [rows, fields] = await connection.query(sql, params);
