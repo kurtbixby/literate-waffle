@@ -57,6 +57,22 @@ const MAIN_MENU_PROMPT = [
                 value: 10
             },
             {
+                name: 'Delete Employee',
+                value: 11
+            },
+            {
+                name: 'Delete Role',
+                value: 12
+            },
+            {
+                name: 'Delete Department',
+                value: 13
+            },
+            {
+                name: 'Get Department Budget',
+                value: 14
+            },
+            {
                 name: 'Quit',
                 value: 0
             }
@@ -75,7 +91,11 @@ async function main() {
         addDepartment,
         updateEmployeeManager,
         viewEmployeesByManager,
-        viewEmployeesByDepartment
+        viewEmployeesByDepartment,
+        deleteEmployee,
+        deleteRole,
+        deleteDepartment,
+        getDepartmentBudget
     ];
     let choice = 0;
     do {
@@ -266,6 +286,77 @@ async function viewEmployeesByDepartment() {
 
     const response = await inquirer.prompt(PROMPT);
     console.table(await dbi.getDepartmentEmployees(response.department));
+}
+
+async function deleteEmployee() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the employee to delete: ',
+            name: 'employee',
+            choices: []
+        }
+    ];
+    
+    const employees = await dbi.getEmployees();
+    employees.forEach(element => {
+        const fullName = `${element['First Name']} ${element['Last Name']}`;
+        PROMPT[0].choices.push({name: fullName, value: element.Id});
+    });
+
+    const response = await inquirer.prompt(PROMPT);
+    await dbi.deleteEmployee(response.employee);
+}
+
+async function deleteRole() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the role to delete: ',
+            name: 'role',
+            choices: []
+        }
+    ];
+    
+    const roles = await dbi.getRoles();
+    roles.forEach(element => PROMPT[0].choices.push({name: element.Title, value: element.Id}));
+
+    const response = await inquirer.prompt(PROMPT);
+    await dbi.deleteRole(response.role);
+}
+
+async function deleteDepartment() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the department to delete: ',
+            name: 'department',
+            choices: []
+        }
+    ];
+    
+    const departments = await dbi.getDepartments();
+    departments.forEach(element => PROMPT[0].choices.push({name: element.Name, value: element.Id}));
+
+    const response = await inquirer.prompt(PROMPT);
+    await dbi.deleteDepartment(response.department);
+}
+
+async function getDepartmentBudget() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose which department\'s budget to see: ',
+            name: 'department',
+            choices: []
+        }
+    ];
+    
+    const departments = await dbi.getDepartments();
+    departments.forEach(element => PROMPT[0].choices.push({name: element.Name, value: element.Id}));
+
+    const response = await inquirer.prompt(PROMPT);
+    console.table(await dbi.getDepartmentBudget(response.department));
 }
 
 main();

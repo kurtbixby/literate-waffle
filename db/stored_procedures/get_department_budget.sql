@@ -4,15 +4,16 @@ DELIMITER //
 
 CREATE PROCEDURE sp_get_department_budget(department_id INT)
 BEGIN
-    SELECT d.id AS 'Id', d.name as 'Name', SUM(salary) AS 'Total Budget'
-    FROM employee AS e
+    SELECT d.id AS Id, d.name AS 'Department', SUM(salary) as 'Total Budget'
+    FROM department as d
         INNER JOIN
         role AS r
-        ON e.role_id = r.id
+        ON d.id = r.department_id
         INNER JOIN
-        department as d
-        ON r.department_id = d.id
-        WHERE d.id = department_id;
+        employee AS e
+        ON r.id = e.role_id
+        WHERE d.id = department_id
+        GROUP BY d.id;
 END //
 
 DELIMITER ;

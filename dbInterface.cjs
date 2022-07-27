@@ -53,6 +53,23 @@ class MySqlInterface {
         return results[0];
     }
 
+    async deleteEmployee(employeeId) {
+        await this.callStoredProcedure('CALL sp_delete_employee(?)', [employeeId]);
+    }
+
+    async deleteRole(roleId) {
+        await this.callStoredProcedure('CALL sp_delete_role(?)', [roleId]);
+    }
+
+    async deleteDepartment(departmentId) {
+        await this.callStoredProcedure('CALL sp_delete_department(?)', [departmentId]);
+    }
+
+    async getDepartmentBudget(departmentId) {
+        const results = await this.callStoredProcedure('CALL sp_get_department_budget(?)', [departmentId]);
+        return results[0];
+    }
+
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
         const [rows, fields] = await connection.query(sql, params);
