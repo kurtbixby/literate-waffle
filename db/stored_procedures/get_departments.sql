@@ -1,4 +1,8 @@
+DELIMITER //
+
 CREATE PROCEDURE sp_get_departments()
 BEGIN
-    select id, name from department;
-END
+    SELECT id AS 'Id', name AS 'Name' FROM department;
+END //
+
+DELIMITER ;

@@ -1,3 +1,5 @@
+DELIMITER //
+
 CREATE PROCEDURE sp_get_employees()
 BEGIN
     SELECT e.id AS 'Id', e.first_name AS 'First Name', e.last_name AS 'Last Name', r.title AS 'Title', d.name AS 'Department', r.salary AS 'Salary', CONCAT(m.first_name, ' ', m.last_name) as 'Manager'
@@ -11,4 +13,6 @@ BEGIN
         INNER JOIN
         department as d
         ON r.department_id = d.id;
-END
+END //
+
+DELIMITER ;
