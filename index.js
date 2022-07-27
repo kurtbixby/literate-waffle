@@ -53,6 +53,10 @@ const MAIN_MENU_PROMPT = [
                 value: 9
             },
             {
+                name: 'View Employees By Department',
+                value: 10
+            },
+            {
                 name: 'Quit',
                 value: 0
             }
@@ -69,7 +73,9 @@ async function main() {
         addRole,
         viewDepartments,
         addDepartment,
-        updateEmployeeManager
+        updateEmployeeManager,
+        viewEmployeesByManager,
+        viewEmployeesByDepartment
     ];
     let choice = 0;
     do {
@@ -223,6 +229,43 @@ async function updateEmployeeManager() {
 
     const response = await inquirer.prompt(PROMPT);
     await dbi.updateEmployeeManager(response.employee, response.manager);
+}
+
+async function viewEmployeesByManager() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the employee whose reports you\'d like to see: ',
+            name: 'employee',
+            choices: []
+        }
+    ]
+    const employees = await dbi.getEmployees();
+    employees.forEach(element => {
+        const fullName = `${element['First Name']} ${element['Last Name']}`;
+        PROMPT[0].choices.push({name: fullName, value: element.Id});
+    });
+
+    const response = await inquirer.prompt(PROMPT);
+    console.table(await dbi.getEmployeesReports(response.employee));
+}
+
+async function viewEmployeesByDepartment() {
+    const PROMPT = [
+        {
+            type: 'list',
+            message: 'Choose the department whose employees you\'d like to see: ',
+            name: 'department',
+            choices: []
+        }
+    ]
+    const departments = await dbi.getDepartments();
+    departments.forEach(element => {
+        PROMPT[0].choices.push({name: element.Name, value: element.Id});
+    });
+
+    const response = await inquirer.prompt(PROMPT);
+    console.table(await dbi.getDepartmentEmployees(response.department));
 }
 
 main();

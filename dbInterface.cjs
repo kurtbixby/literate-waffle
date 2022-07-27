@@ -43,6 +43,16 @@ class MySqlInterface {
         await this.callStoredProcedure('CALL sp_update_employee_manager(?, ?)', [employeeId, managerId]);
     }
 
+    async getEmployeesReports(employeeId) {
+        const results = await this.callStoredProcedure('CALL sp_get_employee_reports(?)', [employeeId]);
+        return results[0];
+    }
+
+    async getDepartmentEmployees(departmentId) {
+        const results = await this.callStoredProcedure('CALL sp_get_department_employees(?)', [departmentId]);
+        return results[0];
+    }
+
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
         const [rows, fields] = await connection.query(sql, params);

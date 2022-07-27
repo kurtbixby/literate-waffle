@@ -19,3 +19,4 @@ VALUES  (1, 'Jeff', 'Dogman', 3, NULL),
         (6, 'Weiss', 'Grimoire', 5, 5),
         (7, 'Noir', 'Grimoire', 4, 6),
         (8, 'Petey', 'Pirahna', 4, 5);
+        (9, 'Rubrum', 'Grimoire', NULL, 5),
