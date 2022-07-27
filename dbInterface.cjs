@@ -1,5 +1,8 @@
 const mysql = require('mysql2/promise');
 
+// Class that holds the connection parameters for future connections
+// Uses stored procedures rather than prepared statement or raw SQL
+// FUTURE: Could try to initialize a connection and just open/close it
 class MySqlInterface {
     constructor({host = 'localhost', user = 'root', database, password} = {}) {
         this.host = host;
@@ -70,6 +73,7 @@ class MySqlInterface {
         return results[0];
     }
 
+    // Main function that actually handles the DB interaction
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
         const [rows, fields] = await connection.query(sql, params);

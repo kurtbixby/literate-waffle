@@ -9,99 +9,68 @@ const dbi = new MySqlInterface({
     password: process.env.PASSWORD
 });
 
-const MAIN_MENU_PROMPT = [
-    {
-        type: 'list',
-        message: 'What would you like to do?',
-        name: 'choice',
-        choices: [
-            {
-                name: 'View All Employees',
-                value: 1
-            },
-            {
-                name: 'Add Employee',
-                value: 2
-            },
-            {
-                name: 'Update Employee Role',
-                value: 3
-            },
-            {
-                name: 'View All Roles',
-                value: 4
-            },
-            {
-                name: 'Add Role',
-                value: 5
-            },
-            {
-                name: 'View All Departments',
-                value: 6
-            },
-            {
-                name: 'Add Department',
-                value: 7
-            },
-            new inquirer.Separator('-- Special --'),
-            {
-                name: 'Update Employee Manager',
-                value: 8
-            },
-            {
-                name: 'View Employees By Manager',
-                value: 9
-            },
-            {
-                name: 'View Employees By Department',
-                value: 10
-            },
-            {
-                name: 'Delete Employee',
-                value: 11
-            },
-            {
-                name: 'Delete Role',
-                value: 12
-            },
-            {
-                name: 'Delete Department',
-                value: 13
-            },
-            {
-                name: 'Get Department Budget',
-                value: 14
-            },
-            {
-                name: 'Quit',
-                value: 0
-            }
-        ]
-    }
-]
-
 async function main() {
-    const functions = [
-        viewEmployees,
-        addEmployee,
-        updateEmployeeRole,
-        viewRoles,
-        addRole,
-        viewDepartments,
-        addDepartment,
-        updateEmployeeManager,
-        viewEmployeesByManager,
-        viewEmployeesByDepartment,
-        deleteEmployee,
-        deleteRole,
-        deleteDepartment,
-        getDepartmentBudget
+    
+    // Base for the menu prompt
+    const MENU_PROMPT = [
+        {
+            type: 'list',
+            message: 'What would you like to do?',
+            name: 'choice',
+            choices: []
+        }
     ];
+
+    // Annotated/wrapped fxns with their human-readable names
+    const regularFunctions = [
+        { prompt: 'View All Employees', fxn: viewEmployees },
+        { prompt: 'Add Employee', fxn: addEmployee },
+        { prompt: 'Update Employee Role', fxn: updateEmployeeRole },
+        { prompt: 'View All Roles', fxn: viewRoles },
+        { prompt: 'Add Role', fxn: addRole },
+        { prompt: 'View All Departments', fxn: viewDepartments },
+        { prompt: 'Add Department', fxn: addDepartment }
+    ];
+    // The bonus functions
+    const bonusFunctions = [
+        { prompt: 'Update Employee Manager', fxn: updateEmployeeManager },
+        { prompt: 'View Employees By Manager', fxn: viewEmployeesByManager },
+        { prompt: 'View Employees By Department', fxn: viewEmployeesByDepartment },
+        { prompt: 'Delete Employee', fxn: deleteEmployee },
+        { prompt: 'Delete Role', fxn: deleteRole },
+        { prompt: 'Delete Department', fxn: deleteDepartment },
+        { prompt: 'Get Department Budget', fxn: getDepartmentBudget }
+    ];
+    // Will hold all of the functions
+    const combinedFunctions = [];
+
+    // Create the main menu from the arrays of menu options above
+
+    // Offset is to allow 0 to be the Quit case
+    let valueOffset = 1;
+
+    // Add each function to the prompt choices array
+    regularFunctions.forEach((e, idx) => {
+        MENU_PROMPT[0].choices.push({ name: e.prompt, value: idx + valueOffset});
+        combinedFunctions.push(e.fxn);
+    });
+    valueOffset += regularFunctions.length;
+
+    // Separate the sections with a separator
+    MENU_PROMPT[0].choices.push(new inquirer.Separator('-- Special --'));
+
+    bonusFunctions.forEach((e, idx) => {
+        MENU_PROMPT[0].choices.push({ name: e.prompt, value: idx + valueOffset});
+        combinedFunctions.push(e.fxn);
+    });
+
+    MENU_PROMPT[0].choices.push({ name: 'Quit', value: 0})
+
     let choice = 0;
     do {
-        choice = (await inquirer.prompt(MAIN_MENU_PROMPT)).choice;
+        choice = (await inquirer.prompt(MENU_PROMPT)).choice;
         if (choice > 0) {
-            await functions[choice - 1]();
+            await combinedFunctions[choice - 1]();
         }
     } while (choice != 0);
 }
@@ -136,9 +105,11 @@ async function addEmployee() {
         }
     ];
 
+    // Push each role Title and corresponding Id into the question
     const roles = await dbi.getRoles();
     roles.forEach(element => PROMPT[2].choices.push({name: element.Title, value: element.Id}));
     
+    // Push each employee name and corresponding Id into the question
     const managers = await dbi.getEmployees();
     managers.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
@@ -165,12 +136,14 @@ async function updateEmployeeRole() {
         }
     ];
     
+    // Push each employee name and corresponding Id into the question
     const employees = await dbi.getEmployees();
     employees.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
         PROMPT[0].choices.push({name: fullName, value: element.Id});
     });
 
+    // Push each role Title and corresponding Id into the question
     const roles = await dbi.getRoles();
     roles.forEach(element => PROMPT[1].choices.push({name: element.Title, value: element.Id}));
 
@@ -202,6 +175,7 @@ async function addRole() {
         }
     ];
 
+    // Push each department Name and corresponding Id into the question
     const department = await dbi.getDepartments();
     department.forEach(element => PROMPT[2].choices.push({name: element.Name, value: element.Id}));
 
@@ -240,6 +214,8 @@ async function updateEmployeeManager() {
         }
     ];
     
+    // Push each employee name and corresponding Id into the question
+    // Once for each question
     const employees = await dbi.getEmployees();
     employees.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
@@ -259,7 +235,9 @@ async function viewEmployeesByManager() {
             name: 'employee',
             choices: []
         }
-    ]
+    ];
+    
+    // Push each employee name and corresponding Id into the question
     const employees = await dbi.getEmployees();
     employees.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
@@ -278,7 +256,9 @@ async function viewEmployeesByDepartment() {
             name: 'department',
             choices: []
         }
-    ]
+    ];
+    
+    // Push each department name and corresponding Id into the question
     const departments = await dbi.getDepartments();
     departments.forEach(element => {
         PROMPT[0].choices.push({name: element.Name, value: element.Id});
@@ -298,6 +278,7 @@ async function deleteEmployee() {
         }
     ];
     
+    // Push each employee name and corresponding Id into the question
     const employees = await dbi.getEmployees();
     employees.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
@@ -318,6 +299,7 @@ async function deleteRole() {
         }
     ];
     
+    // Push each role Title and corresponding Id into the question
     const roles = await dbi.getRoles();
     roles.forEach(element => PROMPT[0].choices.push({name: element.Title, value: element.Id}));
 
@@ -335,6 +317,7 @@ async function deleteDepartment() {
         }
     ];
     
+    // Push each department name and corresponding Id into the question
     const departments = await dbi.getDepartments();
     departments.forEach(element => PROMPT[0].choices.push({name: element.Name, value: element.Id}));
 
@@ -352,6 +335,7 @@ async function getDepartmentBudget() {
         }
     ];
     
+    // Push each department name and corresponding Id into the question
     const departments = await dbi.getDepartments();
     departments.forEach(element => PROMPT[0].choices.push({name: element.Name, value: element.Id}));
 
