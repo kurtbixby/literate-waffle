@@ -41,10 +41,8 @@ class MySqlInterface {
 
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
-        console.log(params);
         const [rows, fields] = await connection.query(sql, params);
         await connection.end();
-        console.log(rows);
         return rows;
     }
 }
