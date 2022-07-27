@@ -9,22 +9,43 @@ class MySqlInterface {
     }
 
     async getDepartments() {
-        return await this.callStoredProcedure('CALL sp_get_departments()');
+        const results = await this.callStoredProcedure('CALL sp_get_departments()');
+        return results[0];
     }
 
     async getEmployees() {
-        return await this.callStoredProcedure('CALL sp_get_employees()');
+        const results = await this.callStoredProcedure('CALL sp_get_employees()');
+        return results[0];
     }
 
     async getRoles() {
-        return await this.callStoredProcedure('CALL sp_get_roles()');
+        const results = await this.callStoredProcedure('CALL sp_get_roles()');
+        return results[0];
+    }
+    
+    async addDepartment(name) {
+        await this.callStoredProcedure('CALL sp_add_department(?)', [name]);
+    }
+    
+    async addEmployee(firstName, lastName, roleId, managerId) {
+        await this.callStoredProcedure('CALL sp_add_employee(?, ?, ?, ?)', [firstName, lastName, roleId, managerId]);
+    }
+    
+    async addRole(title, salary, departmentId) {
+        await this.callStoredProcedure('CALL sp_add_role(?, ?, ?)', [title, salary, departmentId]);
+    }
+
+    async updateEmployeeRole(employeeId, roleId) {
+        await this.callStoredProcedure('CALL sp_update_employee_role(?, ?)', [employeeId, roleId]);
     }
 
     async callStoredProcedure(sql, params = []) {
         const connection = await mysql.createConnection({host: this.host, user: this.user, database: this.database, password: this.password});
-        const [rows, fields] = await connection.query(sql, ...params);
+        console.log(params);
+        const [rows, fields] = await connection.query(sql, params);
         await connection.end();
-        return rows[0];
+        console.log(rows);
+        return rows;
     }
 }
 
