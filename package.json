@@ -2,7 +2,13 @@
   "dependencies": {
     "console.table": "^0.10.0",
     "inquirer": "^9.0.2",
-    "mysql2": "^2.3.3"
+    "mysql2": "^2.3.3",
+    "run-script-os": "^1.1.6"
+  },
+  "scripts": {
+    "start": "run-script-os",
+    "start:win32": "set PASSWORD=<PASSWORDHERE>&& node ./index.js",
+    "start:darwin:linux": "PASSWORD=<PASSWORDHERE> && node ./index.js"
   },
   "type": "module"
 }

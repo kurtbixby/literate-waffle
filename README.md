@@ -23,15 +23,19 @@ Functionality includes:
 - [Contributing](#contributing)
 - [Tests](#tests)
 - [Questions](#questions)
+- [Shout Outs](#shout-outs)
 - [License](#license)
 
 ## Installation
 
-This application requires Node.js and npm to run. To run this application, download the code to your computer via a git clone or a zip download. Navigate to that directory and run ```npm install``` to install all dependencies, then execute ```npm run start``` or ```node index.js``` to run the application.
+This application requires Node.js and npm to run. To run this application, download the code to your computer via a git clone or a zip download. Navigate to that directory and run ```npm install``` to install all dependencies.
 
 ## Usage
 
 This application can be used to create, manage, and interface with an employee database.
+
+Run the program by executing ```npm run start``` or ```node index.js```. 
+This program uses the ```PASSWORD``` environment variable as the password to connect to a database. ```npm run start``` will automatically set the ```PASSWORD``` environment variable to whatever is specified by the script in ```package.json``` and start the application. Otherwise, make sure to set the variable before trying to run this program.
 
 ## Contributing
 
@@ -47,6 +51,11 @@ This software currently does not have any tests.
   * [Inquirer](https://www.npmjs.com/package/inquirer) for user input
   * [MySQL2](https://www.npmjs.com/package/mysql2) for handling the database connection
   * [console.table](https://www.npmjs.com/package/console.table) for printing the data to the console
+  * [run-script-os](https://www.npmjs.com/package/run-script-os) for creating cross-platform start scripts
+
+## Shout Outs
+
+Shout out to the people at [Doc Gov](https://docgov.dev/) for having a [post](https://docgov.dev/posts/npm-scripts/) showcasing how to create cross-platform NPM scripts.
 
 ## License
 
