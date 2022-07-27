@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_get_department_employees;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_get_department_employees(department_id INT)

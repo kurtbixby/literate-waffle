@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_add_employee;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_add_employee(first_name VARCHAR(30), last_name VARCHAR(30), role_id INT, manager_id INT)

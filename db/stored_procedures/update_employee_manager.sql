@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_update_employee_manager;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_update_employee_manager(employee_id INT, manager_id INT)

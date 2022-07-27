@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_get_employee_reports;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_get_employee_reports(employee_id INT)

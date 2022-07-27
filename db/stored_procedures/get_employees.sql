@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_get_employees;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_get_employees()

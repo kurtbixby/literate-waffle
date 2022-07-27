@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS sp_add_role;
+
 DELIMITER //
 
 CREATE PROCEDURE sp_add_role(title VARCHAR(30), salary INT, department_id INT)
