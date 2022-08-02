@@ -28,12 +28,13 @@ Functionality includes:
 
 ## Installation
 
-This application requires Node.js and npm to run. To run this application, download the code to your computer via a git clone or a zip download. Navigate to that directory and run ```npm install``` to install all dependencies.
+This application requires Node.js and npm to run. To run this application, download the code to your computer via a git clone or a zip download. Navigate to that directory and run ```npm install``` to install all dependencies. To create the database, run ```db/DeploymentScript.sql```. To seed the database, run ```db/seeds.sql```.
 
 ## Usage
 
 This application can be used to create, manage, and interface with an employee database.
 
+Make sure to run the database deployment script located at ```db/DeploymentScript.sql``` before running the application.
 Run the program by executing ```npm run start``` or ```node index.js```. 
 This program uses the ```PASSWORD``` environment variable as the password to connect to a database. ```npm run start``` will automatically set the ```PASSWORD``` environment variable to whatever is specified by the script in ```package.json``` and start the application. Otherwise, make sure to set the variable before trying to run this program.
 
