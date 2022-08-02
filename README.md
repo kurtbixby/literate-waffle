@@ -4,7 +4,7 @@
 
 ## Description
 
-A command line frontend for managing an employees MySQL database. A video demonstration of this application can be found on [YouTube]().
+A command line frontend for managing an employees MySQL database. A video demonstration of this application can be found on [YouTube](https://youtu.be/f0lwj0Lzudc).
 
 Functionality includes:
 * Adding a department, employee, or role
