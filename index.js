@@ -115,6 +115,7 @@ async function addEmployee() {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
         PROMPT[3].choices.push({name: fullName, value: element.Id});
     });
+    PROMPT[3].choices.push({name: 'None', value: null});
 
     const response = await inquirer.prompt(PROMPT);
     await dbi.addEmployee(response.name, response.surname, response.role, response.manager);
@@ -222,6 +223,7 @@ async function updateEmployeeManager() {
         PROMPT[0].choices.push({name: fullName, value: element.Id});
         PROMPT[1].choices.push({name: fullName, value: element.Id});
     });
+    PROMPT[1].choices.push({name: 'None', value: null});
 
     const response = await inquirer.prompt(PROMPT);
     await dbi.updateEmployeeManager(response.employee, response.manager);
