@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS sp_get_department_budget;
 
 DELIMITER //
 
-CREATE PROCEDURE sp_get_department_budget(department_id INT)
+CREATE PROCEDURE sp_get_department_budget(selected_department_id INT)
 BEGIN
     SELECT d.id AS Id, d.name AS 'Department', SUM(salary) as 'Total Budget'
     FROM department as d
@@ -12,7 +12,7 @@ BEGIN
         INNER JOIN
         employee AS e
         ON r.id = e.role_id
-        WHERE d.id = department_id
+        WHERE d.id = selected_department_id
         GROUP BY d.id;
 END //
 
