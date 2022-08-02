@@ -25,6 +25,11 @@ class MySqlInterface {
         const results = await this.callStoredProcedure('CALL sp_get_roles()');
         return results[0];
     }
+
+    async getManagers() {
+        const results = await this.callStoredProcedure('CALL sp_get_managers()');
+        return results[0];
+    }
     
     async addDepartment(name) {
         await this.callStoredProcedure('CALL sp_add_department(?)', [name]);

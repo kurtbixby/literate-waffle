@@ -238,7 +238,7 @@ async function viewEmployeesByManager() {
     ];
     
     // Push each employee name and corresponding Id into the question
-    const employees = await dbi.getEmployees();
+    const employees = await dbi.getManagers();
     employees.forEach(element => {
         const fullName = `${element['First Name']} ${element['Last Name']}`;
         PROMPT[0].choices.push({name: fullName, value: element.Id});
